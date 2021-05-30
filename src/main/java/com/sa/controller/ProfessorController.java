@@ -1,7 +1,10 @@
 package com.sa.controller;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
+import com.sa.model.Permissao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -49,7 +52,7 @@ public class ProfessorController {
 		//esse numero é setado no Usuario controller
 		model.addAttribute("salvo",salvo);
 		//retorna a pagina cadastro para o usuario
-		return "/professor/cadastroProfessor";
+		return "professor/cadastroProfessor";
 	}
 
 		//incapsula e envia informação e é chamado atravez do metodo "/usuario/save"
@@ -60,14 +63,27 @@ public class ProfessorController {
 			int salvo = 0;
 			String path  = "";
 			String email = "";
-		
+			Permissao permissao = permissaoRepository.findByNome("aluno");
+
+			if (permissao == null){
+				permissao = new Permissao();
+				Permissao permissao2 = new Permissao();
+				Permissao permissao3 = new Permissao();
+
+				permissao.setNome("aluno");
+				permissaoRepository.save(permissao);
+				permissao2.setNome("professor");
+				permissaoRepository.save(permissao2);
+				permissao3.setNome("diretor");
+				permissaoRepository.save(permissao3);
+			}
 			
 //			verifica o usuario logado e aplica a instancia de conferencia(neste caso é o email do usuario logado) na variavel "email"
 			email = SecurityContextHolder.getContext().getAuthentication().getName();
 			//inicia uma tentativa
 			try {
 				//verifica se o objeto usuario não esta vazio
-				if(professor != null) {
+				if(professor != null && permissao != null) {
 					//seta a variavel salvo para 1 onde vai indicar que o usuario foi salvo atravez de um model
 					salvo = 1;
 					//confere se há um usuario logado ou se ele esta em "logout" ou seja usuario anonimo.
@@ -76,7 +92,9 @@ public class ProfessorController {
 					if(email=="anonymousUser") {
 					//pega a senha cadastrada no objeto usuario, ha codifica e aplica no banco sua nova verção codificada
 						professor.setSenha(new BCryptPasswordEncoder().encode(professor.getSenha()));
-					//salva o usuario criado anteriormente em "IndexController" agora com informações preenchidas no banco e mostra as informações salvas no console para conferencia e manutenção
+						Set<Permissao> permissoes = new HashSet<Permissao>();
+						permissoes.add(permissaoRepository.findByNome("professor"));						professor.setPermissoes(permissoes);
+						//salva o usuario criado anteriormente em "IndexController" agora com informações preenchidas no banco e mostra as informações salvas no console para conferencia e manutenção
 					System.out.print(professorRepository.save(professor));
 					//seta a variavel "path" para que redirecione para tela de cadastro e mostre se o cadastro foi salvo ou nao
 					path  = "redirect:/professor/cadastroProfessor/" + salvo;
@@ -121,7 +139,7 @@ public class ProfessorController {
 			String email = SecurityContextHolder.getContext().getAuthentication().getName();
 			model.addAttribute("professor", professorRepository.findByEmail(email));
 			
-			return "/professor/perfil";
+			return "professor/perfil";
 		}
 		
 

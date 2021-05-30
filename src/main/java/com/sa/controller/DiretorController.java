@@ -18,6 +18,9 @@ import com.sa.repository.ProfessorRepository;
 import com.sa.repository.SalaRepository;
 import com.sa.repository.UsuarioRepository;
 
+import java.util.HashSet;
+import java.util.Set;
+
 @Controller
 public class DiretorController {
 
@@ -55,7 +58,7 @@ public class DiretorController {
 		//esse numero é setado no Usuario controller
 		model.addAttribute("salvo",salvo);
 		//retorna a pagina cadastro para o usuario
-		return "/diretor/cadastroDiretor";
+		return "diretor/cadastroDiretor";
 	}
 
 
@@ -68,13 +71,29 @@ public class DiretorController {
 		int salvo = 0;
 		String path  = "";
 		String email = "";
-	
+		Permissao permissao = permissaoRepository.findByNome("aluno");
+
+		if (permissao == null){
+			permissao = new Permissao();
+			Permissao permissao2 = new Permissao();
+			Permissao permissao3 = new Permissao();
+
+			permissao.setNome("aluno");
+			permissaoRepository.save(permissao);
+			permissao2.setNome("professor");
+			permissaoRepository.save(permissao2);
+			permissao3.setNome("diretor");
+			permissaoRepository.save(permissao3);
+
+
+		}
+
 //		verifica o usuario logado e aplica a instancia de conferencia(neste caso é o email do usuario logado) na variavel "email"
 		email = SecurityContextHolder.getContext().getAuthentication().getName();
 		//inicia uma tentativa
 		try {
 			//verifica se o objeto usuario não esta vazio
-			if(diretor != null) {
+			if(diretor != null && permissao != null) {
 				//seta a variavel salvo para 1 onde vai indicar que o usuario foi salvo atravez de um model
 				salvo = 1;
 				System.out.println(email);
@@ -84,7 +103,10 @@ public class DiretorController {
 				if(email=="anonymousUser") {
 				//pega a senha cadastrada no objeto usuario, ha codifica e aplica no banco sua nova verção codificada
 					diretor.setSenha(new BCryptPasswordEncoder().encode(diretor.getSenha()));
-				//salva o usuario criado anteriormente em "IndexController" agora com informações preenchidas no banco e mostra as informações salvas no console para conferencia e manutenção
+					Set<Permissao> permissoes = new HashSet<Permissao>();
+					permissoes.add(permissaoRepository.findByNome("diretor"));
+					diretor.setPermissoes(permissoes);
+					//salva o usuario criado anteriormente em "IndexController" agora com informações preenchidas no banco e mostra as informações salvas no console para conferencia e manutenção
 				System.out.print(diretorRepository.save(diretor));
 				//seta a variavel "path" para que redirecione para tela de cadastro e mostre se o cadastro foi salvo ou nao
 				path  = "redirect:/diretor/cadastroDiretor/" + salvo;
@@ -134,7 +156,7 @@ public class DiretorController {
 		//as informações deste model podem ser puxadas atravez de seu nome ("usuario") e pode ser ultilizada com um th:object="usuario"
 		model.addAttribute("diretor", usuarioRepository.findByEmail(email));
 		//redireciona para tela de perfil
-		return "/diretor/perfil";
+		return "diretor/perfil";
 		
 	}
 	
