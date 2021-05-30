@@ -38,7 +38,7 @@ public class IndexController {
 
 
 		//retorna a pagina index para o usuario
-		return "/index";
+		return "index";
 	}
 	
 	
