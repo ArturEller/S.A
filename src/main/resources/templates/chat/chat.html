@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="pt-br" xmlns:th="https://thymeleaf.org">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Projeto S.A</title>
+
+        <!--BIBLIOTECAS E EXTENSOS-->
+        <link  rel="stylesheet" th:href="@{/css/estilo.css}">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+        
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/list.js/1.1.1/list.min.js"></script>
+        <script type="text/javascript" th:src="@{/js/chat.js}"></script>
+
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.4.0/sockjs.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
+
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css" rel="stylesheet" type="text/css">
+        <link rel="stylesheet" th:href="@{/bootstrap-4.5.2/css/bootstrap.min.css}">
+        <link rel="stylesheet" th:href="@{/fontawesome-5.14.0/css/all.min.css}">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/3.0.0/handlebars.min.js"></script>
+
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.12.6/js/standalone/selectize.min.js" integrity="sha256-+C0A5Ilqmu4QcSPxrlGpaZxJ04VjsRjKu+G82kl5UJk=" crossorigin="anonymous"></script>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.12.6/css/selectize.bootstrap3.min.css" integrity="sha256-ze/OEYGcFbPRmvCnrSeKbRTtjG4vGLHXgOqsyLFTRjg=" crossorigin="anonymous" />
+
+    </head>
+    <body th:onload="|conectarChat(${usuarioConnect.id})|">
+
+    <div class="justify-container-center containerGeral">
+
+        <div class="row justify-container-center containerGeral">
+            <div class="col-md-4 col-xl-3 chat"><div class="card mb-sm-3 mb-md-0 contacts_card">
+                <div class="card-header">
+                    <div class="input-group">
+                        <input type="text" placeholder="Pesquisar..." name="" class="form-control search">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text search_btn"><i class="fas fa-search"></i></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body contacts_body">
+                    <ui class="contacts">
+
+                        <li th:if="${chat.usuario2.getId()} == ${usuarioConnect.id}" class="active" th:each="chat : ${chats}" th:value="|${chat.chat.getId()}|" th:id="|${chat.usuario1.getId()}|" th:onclick="|usuarioselecionado(${chat.usuario1.getId()}); |">
+                            <div class="d-flex bd-highlight">
+                                <div class="img_cont">
+                                    <img class="rounded-circle user_img">
+                                    <span class="online_icon"></span>
+                                </div>
+                                <div id="userName" class="user_info" th:data-value="${chat.id}">
+                                    <span th:id="${chat.usuario1.getId()}"  th:text="${chat.usuario1.getNome()}"></span>
+                                </div>
+                                <div th:id="msgNova +${chat.usuario1.getId()}" style="display: flex; margin-top: auto; margin-bottom: auto; height: 100%; width: 100%; justify-content: flex-end;" hidden>
+                                    <i class="far fa-envelope msgNova"></i>
+                                </div>
+                            </div>
+                        </li>
+                        <li th:if="${chat.usuario2.getId()} != ${usuarioConnect.id}" class="active" th:each="chat : ${chats}" th:value="|${chat.chat.getId()}|" th:id="|${chat.usuario2.getId()}|" th:onclick="|usuarioselecionado(${chat.usuario2.getId()}); |">
+                            <div class="d-flex bd-highlight">
+                                <div class="img_cont">
+                                    <img class="rounded-circle user_img">
+                                    <span class="online_icon"></span>
+                                </div>
+                                <div id="userName" class="user_info" th:data-value="${chat.id}">
+                                    <span  th:id="${chat.usuario2.getId()}" th:text="${chat.usuario2.getNome()}"></span>
+                                </div>
+                                <div th:id="msgNova + ${chat.usuario2.getId()}" style="display: flex; margin-top: auto; margin-bottom: auto; height: 100%; width: 100%; justify-content: flex-end;" hidden>
+                                    <i class="far fa-envelope msgNova"></i>
+                                </div>
+                            </div>
+                        </li>
+                    </ui>
+                </div>
+
+                <div class="card-footer"></div>
+            </div></div>
+            <div class="col-md-8 col-xl-6 chat">
+                <div class="card">
+                    <div class="card-header msg_head hiddenChat">
+                        <div class="d-flex bd-highlight">
+                            <div class="img_cont">
+                                <img class="rounded-circle user_img">
+                                <span class="online_icon"></span>
+                            </div>
+                            <div class="user_info">
+                                <span id="usuarioChat"></span>
+                                <p id="numMsg"></p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="chat-history card-body hiddenChat">
+                        <ul id="chat-ul" class="chat-ul">
+
+                        </ul>
+                    </div>
+                    <div class="card-footer hiddenChat">
+                        <div class="input-group chat-message clearfix">
+                            <textarea id="message-to-send" name="message-to-send" rows="1" class="form-control type_msg" placeholder="Escreva sua mensagem..."></textarea>
+                            <div class="input-group-append">
+                                <button id="sendBtn" class="input-group-text send_btn">
+                                    <span><i class="fas fa-location-arrow"></i></span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="hiddenChatMsg" hidden>
+                        <span>Selecione uma conversa</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+        <script id="message-template" type="text/x-handlebars-template">
+            <li  class="clearfix">
+                <div class="d-flex justify-content-end mb-4">
+                    <div class="msg_cotainer_send" style="margin: 0px;">
+                        {{messageOutput}}
+                        <span class="msg_time_send">{{time}}</span>
+                    </div>
+                    <div class="img_cont_msg">
+                        <img class="rounded-circle user_img_msg">
+                    </div>
+                </div>
+            </li>
+        </script>
+        
+        <script id="message-response-template" type="text/x-handlebars-template">
+            <li>
+                <div class="d-flex justify-content-start mb-4">
+                    <div class="img_cont_msg">
+                        <img class="rounded-circle user_img_msg">
+                    </div>
+                    <div class="msg_cotainer chat-msg" >
+                        {{response}}
+                        <span class="msg_time">{{time}}</span>
+                    </div>
+                </div>
+            </li>
+        </script>
+    <div id="id"></div>
+    <div id="login"></div>
+    <div id="hrmsg"></div>
+    <div id="mensagem"></div>
+    <div id="chatId"></div>
+
+        <script type="text/javascript" th:src="@{/js/custom.js}"></script>
+    </body>
+</html>

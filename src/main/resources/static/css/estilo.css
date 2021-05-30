@@ -1,0 +1,636 @@
+
+/*PREDEFINICIOS NO BODY*/
+body {
+    background: linear-gradient(to left, #f4f9fd, #e4f2fd);
+    background-repeat: no-repeat;
+    min-height: 100vh;
+    min-width: 100vw;
+}
+.fundo{
+    position: fixed;
+    min-height: 100vh;
+    min-width: 100vw;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #5a95ee;
+}
+.majorContainer{ /*CSS PARA A TELA TODA*/
+    width: 100vw;
+    height: 100vh;
+    background-color: #D7E2F1;
+    margin: 0;
+    padding: 0;
+    max-width: 999999px;
+    display: flex;
+    justify-content: flex-start;
+    position: fixed;
+}
+
+
+/*DENTRO DA INSTITUIÇÃO-salas*/
+.container-list{
+    display: flex;
+    padding-top: 30px;
+    flex-direction: column;
+    align-items: center;
+    background: white;
+    width: 350px;
+    height: 450px;
+    border-radius: 20px;
+    justify-content: flex-start;
+    align-content: center;
+    box-shadow: 20px 20px 50px -30px #000000a8;
+
+}
+.add-inst{
+    width: 226px;
+    height: 226px;
+}
+.text-sala{
+    font-family: "Segoe UI Light";
+    padding-top: 10%;
+}
+.button-voltar{
+    color: #1c79f1;
+    width: 100%;
+    background: none;
+    border: 0px;
+}
+.button-entrar{
+    margin-top: 5%;
+    width: 100%;
+    margin-bottom: 10%;
+    color: #545b62;
+    background: none;
+    border: 0px;
+}
+.button-entrar:hover{
+    color: #0c5460;
+}
+.buttons{
+    margin-top: 50px;
+    height: 50vh;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    flex-direction: column;
+}
+.nameSala{
+    color: black;
+    font-family: "Segoe UI Semibold";
+    font-size: 25px;
+}
+.button-new{
+    margin: 10px 0px 10px 0px;
+    cursor:pointer;
+}
+.entrar-sala{
+    color: #1c79f1;
+    border: 1px solid #1c79f1;
+    background: transparent;
+    border-radius: 5px;
+    height: 30px;
+    margin-bottom: 15px;
+}
+.entrar-sala:hover{
+    background: #1c79f1;
+    color: white;
+}
+
+.sala-css{
+    color: grey;
+    font-size: 20px;
+    padding: 0px 0px 10px 0px;
+    cursor: pointer;
+    display: flex;
+    width: 100%;
+    align-items: baseline;
+    justify-content: space-around;
+}
+.sala-css:hover{
+    color: black;
+    font-size: 22px;
+}
+.iconMenu{
+    padding: 15px 0px 0px 15px;
+    font-size: 30px;
+    color: #1c79f1;
+  }
+#iconMenu{
+width: 20%;
+}
+.iconClose{
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding: 10px 20px 0px 0px;
+    width: 100%;
+    color: #1c79f1;
+  }
+  .lateral{
+    width: 100%;
+    height: 100%;
+    background-color: white;
+  }
+  .labelAluno{
+    height: 20%;
+    display: flex;
+    flex-direction: column;
+    background-color: white;
+    border-radius: 0px 15px 0px 0px;
+    border-bottom: 3px solid rgb(219, 214, 214);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  .infos{
+    height: 65%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-direction: column;
+  }
+  .boxAddandList{
+    margin-top: 50px;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    height: 200px;
+    flex-direction: column;
+    justify-content: flex-start;
+  }
+  .name{
+    height: 10%;
+    background-color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .actions{
+    width: 100%;
+    background-color:white;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    flex-direction: column;
+  }
+  .sair{
+    color: red;
+    margin-top: 5%;
+      cursor: pointer;
+  }
+  .add{
+    text-align: center;
+      cursor: pointer;
+  }
+  h6{
+      font-family: "Segoe UI Light";
+  }
+/*----------AQUI TA OK-------*/
+
+
+/**#6094CE**/
+
+/*AS DIVISORIAS DENTRO DA SALA*/
+.boxLateral{
+    width: 25%;
+    background-color: grey;
+    display: none;
+    box-shadow: 20px 20px 50px -30px #00000099;
+    font-family: "Segoe UI Light";
+    font-size: 20px;
+}
+.nameInstituicao{
+    margin-bottom: 5px;
+    margin-top: 20px;
+}
+.nameInstituicao:hover{
+    cursor: pointer;
+    color: #1c79f1;
+    font-size: 22px;
+}
+
+
+.meio-feed{
+    overflow-y: auto;
+    display: block  ;
+    width: 100%;
+}
+
+.feed-historico{
+    display: grid;
+    width: 100%;
+    justify-items: center;
+}
+
+.infos-pessoas{ /*DA ESQUERDA PARTE BRANCA*/
+    width: 22%;
+    background-color: #6094CE;
+    border-radius: 25px 0px 0px 25px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+
+/*PROF E ALUNO DENTRO DO CONTAINER*/
+
+
+.container-prof{
+    height: 20vh;
+    text-align: center;
+}
+
+.container-alunos{
+    height: 50vh;
+    width: 20%;
+    text-align: center;
+}
+.nomes-prof-aluno{
+    font-family: "Segoe UI Light";
+    font-size: 20px;
+    padding-top: 30px;
+    padding-bottom: 15px;
+    color: white;
+}
+
+
+/*ESTRUTURA PARA O FEED*/
+.estrutura-feed{
+    background: white;
+    width: 90%;
+    min-height: 15%;
+    border-radius: 15px;
+    display: flex;
+    box-shadow: 20px 20px 50px -30px #000000e6;
+    margin-bottom: 25px;
+}
+.name-feed{
+    color: #1c79f1;
+    font-family: "Segoe UI Light";
+    font-size: 20px;
+    padding-top: 50px;
+    padding-bottom: 25px;
+    margin-left: 35px;
+}
+.ft-inst{
+    min-width: 12%;
+    height: 100%;
+    border-radius: 100px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.info-inst{
+    display: flex;
+    border-radius: 15px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    padding-right: 10px;
+    flex-direction: column;
+}
+.info-publi{
+   flex-direction: column; 
+   display: flex;
+   padding: 15px 15px 15px 0px;
+}
+.img-inst{
+    width: 80%;
+    height: 80%;
+}
+.info-name{
+    display: flex;
+    font-family: "Segoe UI Light";
+    text-transform: capitalize;
+    justify-content: space-between;
+}
+
+.info-descricao{
+    word-break: break-word;
+    display: flex;
+    font-family: "Segoe UI Light";
+    font-size: 20px;
+}
+
+.perfil-feed{
+    height: 8vh;
+    display: flex;
+    align-content: center;
+    justify-content: space-evenly;
+    align-items: flex-end;
+}
+.perfilname:hover{
+    cursor: pointer;
+    font-size: 22px;
+}
+.name-name{
+    color: white;
+    padding-top: 10%;
+    padding-bottom: 10%;
+    font-size: 16px;
+    font-family: "Segoe UI Light";
+}
+.button-chat{
+    color: white;
+}
+
+
+
+
+/*--------------BOTÕES--------------S*/
+.button-sala{
+    background: transparent;
+    border-radius: 42px;
+    border: 1px solid white;
+    display: inline-block;
+    cursor: pointer;
+    color: #ffffff;
+    font-family: Arial;
+    font-size: 15px;
+    padding: 5px 30px;
+    margin-bottom: 20px;
+    text-decoration: none;
+    text-shadow: 0px 1px 0px #263666;
+}
+.button-sala:hover {
+    background-color: white;
+    color: #1c79f1;
+}
+.button-sala:active {
+    position:relative;
+    top:1px;
+}
+.button-div{
+    display: flex;
+    height: 20vh;
+    align-items: flex-end;
+    justify-content: center;
+}
+
+
+
+/*=========================CHAT=========================*/
+
+.containerGeral{
+    height: 100vh!important;
+}
+
+.justify-container-center{
+    align-items: center!important;
+    justify-content: center!important;
+}
+
+.hiddenChatMsg{
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center
+
+}
+.hiddenChatMsg span{
+    font-size: 20px;
+    color: white;
+    text-justify: auto;
+}
+
+.chat-ul{
+    list-style-type: none;
+    
+}
+.chat-history{
+    overflow-y: scroll;
+    width: 100%;
+    height: 100%;
+}
+.chat-msg{
+    margin: 0px;
+    text-align: end;
+}
+.card{
+    height: 500px;
+    border-radius: 15px !important;
+    background-color: rgba(0,0,0,0.4) !important;
+}
+.contacts_body{
+    padding:  0.75rem 0 !important;
+    overflow-y: auto;
+    white-space: nowrap;
+}
+.msg_card_body{
+    overflow-y: auto;
+}
+.card-header{
+    border-radius: 15px 15px 0 0 !important;
+    border-bottom: 0 !important;
+}
+.card-footer{
+border-radius: 0 0 15px 15px !important;
+    border-top: 0 !important;
+}
+.container{
+    align-content: center;
+}
+.search{
+    border-radius: 15px 0 0 15px !important;
+    background-color: rgba(0,0,0,0.3) !important;
+    border:0 !important;
+    color:white !important;
+}
+.search:focus{
+     box-shadow:none !important;
+   outline:0px !important;
+}
+.type_msg{
+    background-color: rgba(0,0,0,0.3) !important;
+    border:0 !important;
+    color:white !important;
+    height: 60px !important;
+    overflow-y: auto;
+}
+    .type_msg:focus{
+     box-shadow:none !important;
+   outline:0px !important;
+}
+.attach_btn{
+border-radius: 15px 0 0 15px !important;
+background-color: rgba(0,0,0,0.3) !important;
+    border:0 !important;
+    color: white !important;
+    cursor: pointer;
+}
+.send_btn{
+border-radius: 0 15px 15px 0 !important;
+background-color: rgba(0,0,0,0.3) !important;
+    border:0 !important;
+    color: white !important;
+    cursor: pointer;
+}
+.search_btn{
+    border-radius: 0 15px 15px 0 !important;
+    background-color: rgba(0,0,0,0.3) !important;
+    border:0 !important;
+    color: white !important;
+    cursor: pointer;
+}
+.contacts{
+    list-style: none;
+    padding: 0;
+}
+.contacts li{
+    width: 100% !important;
+    padding: 5px 10px;
+    margin-bottom: 15px !important;
+}
+.active{
+    background-color: rgba(0,0,0,0.3);
+}
+.user_img{
+    height: 70px;
+    width: 70px;
+    border:1.5px solid #f5f6fa;
+
+}
+.user_img_msg{
+    height: 40px;
+    width: 40px;
+    border:1.5px solid #f5f6fa;
+
+}
+.img_cont{
+    position: relative;
+    height: 70px;
+    width: 70px;
+}
+.img_cont_msg{
+    height: 40px;
+    width: 40px;
+}
+.online_icon{
+position: absolute;
+height: 15px;
+width:15px;
+background-color: #4cd137;
+border-radius: 50%;
+bottom: 0.2em;
+right: 0.4em;
+border:1.5px solid white;
+}
+.offline{
+background-color: #c23616 !important;
+}
+.user_info{
+margin-top: auto;
+margin-bottom: auto;
+margin-left: 15px;
+}
+.user_info span{
+font-size: 20px;
+color: white;
+}
+.user_info p{
+font-size: 10px;
+color: rgba(255,255,255,0.6);
+}
+.video_cam{
+margin-left: 50px;
+margin-top: 5px;
+}
+.video_cam span{
+color: white;
+font-size: 20px;
+cursor: pointer;
+margin-right: 20px;
+}
+.msg_cotainer{
+margin-top: auto;
+margin-bottom: auto;
+margin-left: 10px;
+border-radius: 25px;
+background-color: #82ccdd;
+padding: 10px;
+position: relative;
+min-width: 70px;
+}
+.msg_cotainer_send{
+margin-top: auto;
+margin-bottom: auto;
+margin-right: 10px;
+border-radius: 25px;
+background-color: #78e08f;
+padding: 10px;
+position: relative;
+min-width: 70px;
+}
+.msg_time{
+position: absolute;
+left: 0;
+bottom: -15px;
+color: rgba(255,255,255,0.5);
+font-size: 10px;
+}
+.msg_time_send{
+position: absolute;
+right:0;
+bottom: -15px;
+color: rgba(255,255,255,0.5);
+font-size: 10px;
+}
+.msg_head{
+position: relative;
+}
+#action_menu_btn{
+position: absolute;
+right: 10px;
+top: 10px;
+color: white;
+cursor: pointer;
+font-size: 20px;
+}
+.action_menu{
+z-index: 1;
+position: absolute;
+padding: 15px 0;
+background-color: rgba(0,0,0,0.5);
+color: white;
+border-radius: 15px;
+top: 30px;
+right: 15px;
+display: none;
+}
+.action_menu ul{
+list-style: none;
+padding: 0;
+margin: 0;
+}
+.action_menu ul li{
+width: 100%;
+padding: 10px 15px;
+margin-bottom: 5px;
+}
+.action_menu ul li i{
+padding-right: 10px;
+
+}
+.action_menu ul li:hover{
+cursor: pointer;
+background-color: rgba(0,0,0,0.2);
+}
+@media(max-width: 576px){
+.contacts_card{
+margin-bottom: 15px !important;
+}
+}
+
+@media screen and (min-height: 800px){
+
+    .card{
+        height: 750px;
+        border-radius: 15px !important;
+        background-color: rgba(0,0,0,0.4) !important;
+    }
+
+}
+
+

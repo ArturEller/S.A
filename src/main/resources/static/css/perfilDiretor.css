@@ -1,0 +1,81 @@
+textarea:focus, input:focus, select:focus {
+  box-shadow: 0 0 0 0;
+  border-bottom: 1px solid gray;
+  outline: 0;
+} 
+.majorDiv{
+
+  width: 100vw;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(to left, #02BED8, #457ED6);
+}
+.divMenor{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: white;
+  width: 60%;
+  height: 75%;
+  border-radius: 20px;
+  background: none;
+}
+.login{
+  max-width: 100px;
+  margin: 30px 0;
+}
+.formUser{
+  display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+    width: 90%;
+}
+.css-email{
+  border: 0;
+  width: 70%;
+  background: #dee2e6c2;
+  border-radius: 5px;
+  height: 40px;
+  color: #000000;
+  padding-left: 15px;
+}
+#editDescricao{
+  height: 200px;
+  color: black;
+}
+#editDescricao::placeholder{
+  color: white;
+}
+.boxActions{
+  gap: 20px;
+  display: flex;
+  margin: 20px 0 0 0;
+}
+.alert{
+  margin-top: 20px;
+}
+.linhaEspacamento{
+  height: 1px;
+  background: rgba(0,0,0,0.1);
+  width: 70%;
+  margin: 10px 0px;
+}
+.myButton{
+  width: 70%;
+  border: 0;
+  background-color: #3359c5;
+  color: #ffffff;
+  height: 45px;
+  border-radius: 5px;
+  font-size: 16px;
+
+}
+#cancelar{
+  background-color: #f83636;
+  margin-top: 7px;
+  width: 63.2%
+}
