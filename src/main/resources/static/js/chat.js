@@ -1,4 +1,4 @@
-const url= 'http://localhost:8080';
+const url= 'https://estude-aqui.herokuapp.com';
 let stompClient;
 let usuarioselect
 let usuarioConectado
