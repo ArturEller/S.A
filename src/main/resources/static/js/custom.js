@@ -23,22 +23,28 @@ function cacheDOM() {
 }
 
 function render(message, userName) {
-    scrollToBottom();
-    // responses
-    var templateResponse = Handlebars.compile($("#message-response-template").html());
-    var contextResponse = {
-        response: message,
-        time: getCurrentTime(),
-        userName: userName
-    };
+    if (message!="" && message!=null ) {
 
-    setTimeout(function () {
-        $chatHistoryList.append(templateResponse(contextResponse));
         scrollToBottom();
-    }.bind(this), 200);
+        // responses
+        var templateResponse = Handlebars.compile($("#message-response-template").html());
+        var contextResponse = {
+            response: message,
+            time: getCurrentTime(),
+            userName: userName
+        };
+
+        setTimeout(function () {
+            $chatHistoryList.append(templateResponse(contextResponse));
+            scrollToBottom();
+        }.bind(this), 200);
+    }
 }
 
 function renderdb(message, userName, time, usurioConectado) {
+    if (message!="" && message!=null){
+
+
     scrollToBottom();
     // responses
 
@@ -63,6 +69,7 @@ function renderdb(message, userName, time, usurioConectado) {
         $chatHistoryList.append(templateResponse(contextResponse));
         scrollToBottom();
     }.bind(this), 200);
+    }
 }
 
 function sendMessage(message) {
@@ -110,7 +117,9 @@ function getCurrentData() {
 }
 
 function addMessage() {
-    if($textarea.val() !== '' || $textarea.val() != null || $textarea.val() != "\n" ||$textarea.val() != ""){
+
+    var aux = $textarea.val().replaceAll("\n","");
+    if (aux != ""&& aux != null&& aux != "\n") {
         sendMessage($textarea.val());
     }
 
@@ -118,7 +127,8 @@ function addMessage() {
 
 function addMessageEnter(event) {
     // enter was pressed
-    if (event.keyCode === 13) {
+    var aux = $textarea.val().replaceAll("\n","");
+    if (event.keyCode === 13 && aux != ""&& aux != null&& aux != "\n") {
         addMessage();
     }
 }
