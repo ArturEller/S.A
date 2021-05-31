@@ -53,7 +53,7 @@
                     <form th:if="${editavel}" th:action="|@{/logout}|"  method="POST">
                         <button class="botao-lateral" type="submit">logout</button>
                     </form>
-                    <button class="botao-lateral" onclick="sumirJanela('flutuante2')" type="button">Deletar Conta?</button>
+                    <button th:if="${editavel}" class="botao-lateral" onclick="sumirJanela('flutuante2')" type="button">Deletar Conta?</button>
 
                 </div>
 
