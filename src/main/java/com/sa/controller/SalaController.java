@@ -79,53 +79,13 @@ public class SalaController {
         return "redirect:/sala/listSala/" + id;
     }
 
-    @GetMapping("/sala/addsala/{id}")
-    public String addSala(Model model, @PathVariable long id) {
-        String email = "";
-        String path = "";
-        Usuario usuario;
 
-        Permissao permissao;
-        Instituicao instituicao = instituicaoRepository.findById(id);
-
-        //verifica o usuario logado e aplica a instancia de conferencia(neste caso é o email do usuario logado) na variavel "email"
-        email = SecurityContextHolder.getContext().getAuthentication().getName();
-        usuario = usuarioRepository.findByEmail(email);
-        permissao = permissaoRepository.findByNome("aluno");
-        if (usuario.getPermissoes().contains(permissao)){
-
-            System.out.println("id: " + id);
-            System.out.println("id: " + instituicao);
-
-            model.addAttribute("salas", salaRepository.findByInstituicao(instituicao));
-            model.addAttribute("instituicao", instituicao);
-            model.addAttribute("aluno", usuario);
-            System.out.println("salas: " + salaRepository.findByInstituicao(instituicao));
-            path = "aluno/addsala";
-        }
-        permissao = permissaoRepository.findByNome("professor");
-        if (usuario.getPermissoes().contains(permissao)){
-
-            System.out.println("id: " + id);
-            System.out.println("id: " + instituicao);
-
-            model.addAttribute("salas", salaRepository.findByInstituicao(instituicao));
-            model.addAttribute("instituicao", instituicao);
-            model.addAttribute("professor", usuario);
-            System.out.println("salas: " + salaRepository.findByInstituicao(instituicao));
-
-            path = "professor/addsala";
-        }
-
-
-        return path;
-    }
 
 
 
 
     @PostMapping("/aluno/insertSala/{id}")
-    public String insertSalaAluno(Sala sala,Aluno aluno, @PathVariable int id) {
+    public String insertSalaAluno(Aluno aluno, @PathVariable int id) {
 
 
         String email;
@@ -136,9 +96,12 @@ public class SalaController {
         salaAux = alunoRepository.findByEmail(email).getSalasA();
 
         try {
-            salaAux.addAll(aluno.getSalasA());
-            aluno.setSalasA(salaAux);
-            System.out.println(alunoRepository.save(aluno));
+            if (!alunoRepository.findByEmail(email).getSalasA().contains(aluno.getSalasA())){
+                salaAux.addAll(aluno.getSalasA());
+                aluno.setSalasA(salaAux);
+                System.out.println(alunoRepository.save(aluno));
+            }
+
 
         } catch (Exception e) {
             System.out.println("error: " + e);
@@ -149,6 +112,32 @@ public class SalaController {
         return "redirect:/sala/listSala/" + id;
 
     }
+
+//    @PostMapping("/aluno/removeSala/{id}")
+//    public String removeSalaAluno(Aluno aluno, @PathVariable int id) {
+//
+//
+//        String email;
+//        List<Sala> salaAux;
+//
+//        email = SecurityContextHolder.getContext().getAuthentication().getName();
+//        System.out.println(email);
+//        salaAux = alunoRepository.findByEmail(email).getSalasA();
+//
+//        try {
+//            salaAux.remove(aluno.getSalasA());
+//            aluno.setSalasA(salaAux);
+//            System.out.println(alunoRepository.save(aluno));
+//
+//        } catch (Exception e) {
+//            System.out.println("error: " + e);
+//        }
+//        //instituicao = instituicaoRepository.findById(id)
+//
+//
+//        return "redirect:/sala/listSala/" + id;
+//
+//    }
 
     @PostMapping("/professor/insertsala/{id}")
     public String insertSalaProfessor(Sala sala,Professor professor, @PathVariable int id) {
@@ -191,6 +180,8 @@ public class SalaController {
         permissao = permissaoRepository.findByNome("aluno");
 
         if (usuario.getPermissoes().contains(permissao)){
+            model.addAttribute("salasC", salaRepository.findByInstituicaoAndAlunoSNotContains(instituicao, alunoRepository.findByEmail(email)));
+
             model.addAttribute("salas", salaRepository.findByInstituicao(instituicao));
             model.addAttribute("instituicao", instituicao);
 
@@ -218,6 +209,8 @@ public class SalaController {
             System.out.println("chegou aqui" );
             //verifica o usuario logado e aplica a instancia de conferencia(neste caso é o email do usuario logado) na variavel "email"
             model.addAttribute("professor", usuario);
+            model.addAttribute("salasC", salaRepository.findByInstituicaoAndProfessoresSNotContains(instituicao, professorRepository.findByEmail(email)));
+
             model.addAttribute("salas", salaRepository.findByInstituicao(instituicao));
             model.addAttribute("instituicao", instituicao);
             model.addAttribute("sala", new Sala());
@@ -258,8 +251,8 @@ public class SalaController {
             model.addAttribute("professores", professorRepository.findBySalaP(sala));
             model.addAttribute("sala",sala);
             model.addAttribute("publicacao",new Publicacao());
-            model.addAttribute("publicacoes",publicacaoRepository.findBySala(sala));
-
+            model.addAttribute("publicacoes",publicacaoRepository.findBySalaOrderByIdDesc(sala));
+            model.addAttribute("podePublicar",alunoRepository.findBySalasAContains(sala));
             model.addAttribute("materias",materiaRepository.findAll());
 
             path = "aluno/sala";
@@ -277,7 +270,7 @@ public class SalaController {
             model.addAttribute("alunos", alunoRepository.findBySalasA(sala));
             model.addAttribute("professores", professorRepository.findBySalaP(sala));
             model.addAttribute("publicacao",new Publicacao());
-            model.addAttribute("publicacoes",publicacaoRepository.findBySala(sala));
+            model.addAttribute("publicacoes",publicacaoRepository.findBySalaOrderByIdDesc(sala));
             
             model.addAttribute("materias",materiaRepository.findAll());
             
@@ -296,7 +289,7 @@ public class SalaController {
             model.addAttribute("professores", professorRepository.findBySalaP(sala));
             model.addAttribute("sala",sala);
             model.addAttribute("publicacao",new Publicacao());
-            model.addAttribute("publicacoes",publicacaoRepository.findBySala(sala));
+            model.addAttribute("publicacoes",publicacaoRepository.findBySalaOrderByIdDesc(sala));
 
             model.addAttribute("materias",materiaRepository.findAll());
             

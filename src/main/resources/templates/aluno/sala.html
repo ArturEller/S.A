@@ -69,13 +69,13 @@
             <div th:each="publicacao : ${publicacoes}" class="estrutura-feed">
 
                 <div class="ft-inst">
-                    <img th:if="${publicacao.usuario.sexo} == 'masculino'" class="img-inst" th:src="@{/src/testimonial-3.svg}">
-                    <img th:if="${publicacao.usuario.sexo} == 'feminino'" class="img-inst" th:src="@{/src/testimonial-3.svg}">
+                    <img th:if="${publicacao.usuario.sexo} == ${publicacao.usuario.sexo.masculino}" th:onclick="|window.location.href='/perfil/' + ${publicacao.usuario.id}|" class="img-inst" th:src="@{/src/testimonial-3.svg}">
+                    <img th:if="${publicacao.usuario.sexo} == ${publicacao.usuario.sexo.feminino}" th:onclick="|window.location.href='/perfil/' + ${publicacao.usuario.id}|" class="img-inst" th:src="@{/src/testimonial-2.svg}">
                 </div>
                 <div class="info-publi">
                     <div class="info-inst">
                         <div class="info-name">
-                            <div>
+                            <div th:onclick="|window.location.href='/perfil/' + ${publicacao.usuario.id}|">
                                 <h4 th:text="${publicacao.usuario.nome}"></h4>
                             </div>
                             <div>
@@ -83,6 +83,9 @@
                             </div>
                             <div>
                                <h4 th:text="${publicacao.instituicao.nome}"></h4>
+                            </div>
+                            <div>
+                                <h4 th:onclick="|window.location.href='/chat/add/' + ${publicacao.usuario.id} |"><i class="fas fa-comments"></i></h4>
                             </div>
                         </div>
                     </div>
@@ -136,7 +139,7 @@
         <div class="button-div">
             <button type="button" th:onclick="|window.location.href='/sala/listSala/' + ${instituicao.id} |" class="button-sala">Voltar</button>
         </div>
-        <button class="button-sala" type="button"  onclick="sumirJanela('flutuante2')">Publicar</button>
+        <button th:if="${podePublicar} != null" class="button-sala" type="button"  onclick="sumirJanela('flutuante2')">Publicar</button>
     </div> <!--fechando as info-->
     
     <div id="flutuante2" class="major-flutuante" hidden>
@@ -149,7 +152,7 @@
 
                     <input  th:field="*{id}" hidden></input>
                     <div class="text-publi">
-                        <textarea class="text-publi" placeholder="Digite a descrição." th:field="*{descricao}"></textarea>
+                        <textarea class="text-publi" style="resize: none" maxlength="255" placeholder="Digite a descrição." th:field="*{descricao}"></textarea>
                     </div>
                     <div class="div-select">
                         <div class="select-group mb-3">
@@ -167,7 +170,8 @@
                                 <label class="input-group-text" for="inputGroupSelect01">Matéria</label>
                             </div>
                             <div class="div-select">
-                                <select class="form-control select-publi" th:field="*{materia}"  required>
+                                <select class="form-control select-publi" th:field="*{materia}">
+                                    <option value="" selected>Nenhuma matéria</option>
                                     <option th:each="materias : ${materias}" th:value="${materias.id}" th:text="${materias.nome}"></option>
                                 </select>
                             </div>
@@ -182,6 +186,8 @@
         </div>
         <div class="fundo-flutuante" onclick="sumirJanela('flutuante2')"></div>
     </div>
+
+
 
 </div>
 

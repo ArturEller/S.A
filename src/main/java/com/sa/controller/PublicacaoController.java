@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import javax.transaction.Transactional;
+
 @Controller
 public class PublicacaoController {
 
@@ -31,7 +33,9 @@ public class PublicacaoController {
     PublicacaoRepository publicacaoRepository;
     @Autowired
     SalaRepository salaRepository;
-    
+    @Autowired
+    MateriaRepository materiaRepository;
+
     
     @GetMapping("/feed")
 	public String feed(Model model) {
@@ -43,18 +47,21 @@ public class PublicacaoController {
 		email = SecurityContextHolder.getContext().getAuthentication().getName();
 		usuario = usuarioRepository.findByEmail(email);
 		permissao = permissaoRepository.findByNome("aluno");
-
+		
+		
 		model.addAttribute("usuario", usuarioRepository.findByEmail(email));
+		model.addAttribute("materias", materiaRepository.findAll());
 
 		if(usuario.getPermissoes().contains(permissao)) {
 			Aluno aluno;
 
 			aluno = alunoRepository.findByEmail(email);
+			model.addAttribute("salas", salaRepository.findByAlunoS(aluno));
 			model.addAttribute("instituicoes", instituicaoRepository.findByAlunosI(aluno));
 			model.addAttribute("aluno", alunoRepository.findByEmail(email));
 			model.addAttribute("instituicoesadd", instituicaoRepository.findAll());
             model.addAttribute("publicacao",new Publicacao());
-            model.addAttribute("publicacoes",publicacaoRepository.findByInstituicaoIn(aluno.getInstituicoesA()));
+            model.addAttribute("publicacoes",publicacaoRepository.findByInstituicaoInOrderByIdDesc(aluno.getInstituicoesA()));
 			
 		}
 
@@ -66,11 +73,13 @@ public class PublicacaoController {
 			professor = professorRepository.findByEmail(email);
 
 			model.addAttribute("instituicoes", instituicaoRepository.findByProfessoresI(professor));
-			model.addAttribute("professor", professorRepository.findByEmail(email));
+            model.addAttribute("salas", salaRepository.findByInstituicaoIn(instituicaoRepository.findByProfessoresI(professor)));
+
+            model.addAttribute("professor", professorRepository.findByEmail(email));
 			model.addAttribute("materiasSugerida", materiaSugeridaRepository.findByInstituicaoIn(instituicaoRepository.findByProfessoresI(professor)));
 			model.addAttribute("instituicoesadd", instituicaoRepository.findAll());
 			model.addAttribute("publicacao",new Publicacao());
-            model.addAttribute("publicacoes",publicacaoRepository.findByInstituicaoIn(professor.getInstituicaoP()));
+            model.addAttribute("publicacoes",publicacaoRepository.findByInstituicaoInOrderByIdDesc(professor.getInstituicaoP()));
 
 		}
 
@@ -80,11 +89,13 @@ public class PublicacaoController {
 
 			diretor = diretorRepository.findByEmail(email);
 			model.addAttribute("instituicoes", instituicaoRepository.findByDiretor(diretor));
-			model.addAttribute("materiasSugerida", materiaSugeridaRepository.findByInstituicaoIn(instituicaoRepository.findByDiretor(diretor)));
+            model.addAttribute("salas", salaRepository.findByInstituicaoIn(instituicaoRepository.findByDiretor(diretor)));
+
+            model.addAttribute("materiasSugerida", materiaSugeridaRepository.findByInstituicaoIn(instituicaoRepository.findByDiretor(diretor)));
 			model.addAttribute("diretor", diretorRepository.findByEmail(email));
 			model.addAttribute("instituicaoadd", new Instituicao());
 			model.addAttribute("publicacao",new Publicacao());
-            model.addAttribute("publicacoes",publicacaoRepository.findByInstituicaoIn(diretor.getInstituicao()));
+            model.addAttribute("publicacoes",publicacaoRepository.findByInstituicaoInOrderByIdDesc(diretor.getInstituicao()));
 		}
 		
 		return "feed/feed";
@@ -121,5 +132,49 @@ public class PublicacaoController {
 
         return "redirect:/sala/" +id;
     }
+    
+    @PostMapping("/publicacao/save")
+    public String savePublicaoGeral(Publicacao publicacao){
 
+        String email= SecurityContextHolder.getContext().getAuthentication().getName();
+        String path="";
+
+        Usuario usuario;
+        Permissao permissao;
+
+        //verifica o usuario logado e aplica a instancia de conferencia(neste caso é o email do usuario logado) na variavel "email"
+        email = SecurityContextHolder.getContext().getAuthentication().getName();
+        usuario = usuarioRepository.findByEmail(email);
+        permissao = permissaoRepository.findByNome("aluno");
+
+
+
+        try {
+        	publicacao.setInstituicao(publicacao.getSala().getInstituicao());
+            publicacao.setUsuario(usuario);
+            publicacaoRepository.save(publicacao);
+
+        }catch (Exception e){
+            System.out.println(e);
+        }
+
+
+
+        return "redirect:/feed/";
+    }
+
+    @Transactional
+    @GetMapping("/publicacao/delete/{id}")
+    public String deletePublicação(@PathVariable long id){
+
+        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+        Usuario usuario = usuarioRepository.findByEmail(email);
+        Publicacao publicacao = publicacaoRepository.findById(id);
+        try {
+            publicacaoRepository.delete(publicacao);
+        }catch (Exception e){
+            System.out.println(e);
+        }
+        return "redirect:/perfil/" + usuario.getId();
+    }
 }

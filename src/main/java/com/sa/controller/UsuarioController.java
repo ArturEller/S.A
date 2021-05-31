@@ -20,6 +20,8 @@ import com.sa.model.Aluno;
 import com.sa.model.Permissao;
 import com.sa.model.Usuario;
 
+import javax.transaction.Transactional;
+
 //transforma esta classe em um controller
 //controller = classe que faz o intermedio entre pagina web, banco e security.
 
@@ -41,13 +43,22 @@ public class UsuarioController {
 	@Autowired
 	UsuarioRepository usuarioRepository;
 
-	@GetMapping("/usuario/delete/{id}")
-	public String deleteUsuario(@PathVariable long id) {
+	@Autowired
+	UsuarioChatRepository usuarioChatRepository;
+
+	@Autowired
+	PublicacaoRepository publicacaoRepository;
+
+	@Transactional
+	@GetMapping("/usuario/delete")
+	public String deleteUsuario() {
 		//pega o email do usuario logado e quarda na variavel "email"
 		String email = SecurityContextHolder.getContext().getAuthentication().getName();
-
+		Usuario usuario = usuarioRepository.findByEmail(email);
 		try {
-			usuarioRepository.deleteByEmail(email);
+			publicacaoRepository.deleteByUsuario(usuario);
+			usuarioChatRepository.deleteByUsuario1OrUsuario2(usuario,usuario);
+			usuarioRepository.delete(usuario);
 		} catch (Exception e) {
 			System.out.print("Erro ao deletar: " + e.getMessage());
 		}
@@ -71,7 +82,7 @@ public class UsuarioController {
 
 			model.addAttribute("aluno", alunoRepository.findById(id).get());
 			model.addAttribute("materiaSugerida", new MateriaSugerida());
-
+			model.addAttribute("publicacoes", publicacaoRepository.findByUsuario(usuario));
 
 
 			path = "aluno/perfil";
@@ -81,6 +92,7 @@ public class UsuarioController {
 		if (usuario.getPermissoes().contains(permissao)){
 
 			model.addAttribute("professor", professorRepository.findById(id).get());
+			model.addAttribute("publicacoes", publicacaoRepository.findByUsuario(usuario));
 
 			path = "professor/perfil";
 		}
@@ -88,6 +100,7 @@ public class UsuarioController {
 		if (usuario.getPermissoes().contains(permissao)){
 
 			model.addAttribute("diretor", diretorRepository.findById(id).get());
+			model.addAttribute("publicacoes", publicacaoRepository.findByUsuario(usuario));
 
 			path = "diretor/perfil";
 		}
