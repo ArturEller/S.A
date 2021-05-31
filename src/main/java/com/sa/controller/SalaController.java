@@ -252,7 +252,7 @@ public class SalaController {
             model.addAttribute("sala",sala);
             model.addAttribute("publicacao",new Publicacao());
             model.addAttribute("publicacoes",publicacaoRepository.findBySalaOrderByIdDesc(sala));
-            model.addAttribute("podePublicar", salaRepository.findByAlunoS(aluno));
+            model.addAttribute("podePublicar", salaRepository.findByAlunoS(aluno).contains(sala));
             model.addAttribute("materias",materiaRepository.findAll());
 
             path = "aluno/sala";
