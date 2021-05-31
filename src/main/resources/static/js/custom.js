@@ -71,7 +71,7 @@ function sendMessage(message) {
     console.log(dataMsg)
     enviarMensagem(username, message, dataMsg);
     scrollToBottom();
-    if (message.trim() !== '' || message.trim() != null || message.trim() != "\n" || message.trim() != "" || message !== '' || message != null || message != "\n" || message != "") {
+    if (message.trim() !== '' && message.trim() != null && message.trim() != "\n" && message.trim() != "" ) {
         var template = Handlebars.compile($("#message-template").html());
         var context = {
             messageOutput: message,
